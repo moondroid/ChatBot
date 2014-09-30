@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dddddd" >
+
+    <ListView
+        android:id="@+id/chat_listView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/form"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent">
+    </ListView>
+
+    <RelativeLayout
+        android:id="@+id/form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:padding="16dp"
+        android:background="@android:color/white">
+
+        <EditText
+            android:id="@+id/chat_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:inputType="text" />
+    </RelativeLayout>
+
+</RelativeLayout>

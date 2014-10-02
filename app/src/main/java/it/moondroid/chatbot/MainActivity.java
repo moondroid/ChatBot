@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 
+import it.moondroid.chatbot.alice.Alice;
 import it.moondroid.chatbot.eliza.Eliza;
 
 
@@ -22,6 +23,7 @@ public class MainActivity extends Activity {
     private EditText chatEditText;
 
     Eliza eliza;
+    Alice alice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         eliza = new Eliza(this);
+        alice = new Alice(this, new String[0]);
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
 

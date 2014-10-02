@@ -27,7 +27,7 @@ public class MagicStrings {
     public static String program_name_version = "Program AB 0.0.6.26 beta -- AI Foundation Reference AIML 2.1 implementation";
     public static String comment = "Added repetition detection.";
     public static String aimlif_split_char = ",";
-    public static String default_bot = "alice2";
+    public static String default_bot = "alice";
     public static String default_language = "EN";
     public static String aimlif_split_char_name = "\\#Comma";
     public static String aimlif_file_suffix = ".csv";
@@ -98,7 +98,7 @@ public class MagicStrings {
     public static String map_singular = "singular";
     public static String map_plural = "plural";
     // paths
-    public static String root_path = "c:/ab";
+    public static String root_path = "";
 
 	public static void setRootPath(String newRootPath) {
 		root_path = newRootPath;

@@ -20,18 +20,30 @@ package it.moondroid.chatbot.alice;
 */
 
 
+import android.content.Context;
+
 import java.io.*;
 import java.util.HashMap;
+
+import it.moondroid.chatbot.alice.utils.IOUtils;
 
 
 public class Alice {
 
-    public Alice (String[] args) {
+    private static Context context;
+    private static Bot bot;
 
+
+    public Alice (Context context, String[] args) {
+        this.context = context;
         MagicStrings.setRootPath();
 
         AIMLProcessor.extension =  new PCAIMLProcessorExtension();
         mainFunction(args);
+    }
+
+    public static Context getContext(){
+        return context;
     }
 
     public static void mainFunction (String[] args) {
@@ -64,7 +76,7 @@ public class Alice {
         if (MagicBooleans.trace_mode) System.out.println("Working Directory = " + MagicStrings.root_path);
         Graphmaster.enableShortCuts = true;
         //Timer timer = new Timer();
-        Bot bot = new Bot(botName, MagicStrings.root_path, action); //
+        bot = new Bot(botName, MagicStrings.root_path, action); //
         //EnglishNumberToWords.makeSetMap(bot);
         //getGloss(bot, "c:/ab/data/wn30-lfs/wne-2006-12-06.xml");
         if (MagicBooleans.make_verbs_sets_maps) Verbs.makeVerbSetsMaps(bot);
@@ -90,11 +102,22 @@ public class Alice {
             }
         else System.out.println("Unrecognized action "+action);
     }
+
     public static void convert(Bot bot, String action) {
         if (action.equals("aiml2csv")) bot.writeAIMLIFFiles();
         else if (action.equals("csv2aiml")) bot.writeAIMLFiles();
     }
 
+    public String processInput(String request) {
+        String response = "";
+        Chat chatSession = new Chat(bot, false);
+        bot.brain.nodeStats();
+        response = chatSession.multisentenceRespond(request);
+        while (response.contains("&lt;")) response = response.replace("&lt;","<");
+        while (response.contains("&gt;")) response = response.replace("&gt;",">");
+
+        return response;
+    }
 
     public static void getGloss (Bot bot, String filename) {
         System.out.println("getGloss");

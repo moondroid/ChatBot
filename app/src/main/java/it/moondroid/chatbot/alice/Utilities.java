@@ -73,18 +73,16 @@ public class Utilities {
     }
     public static String getFile (String filename) {
         String contents = "";
+
         try {
-            File file = new File(filename);
-            if (file.exists()) {
-                //System.out.println("Found file "+filename);
-                FileInputStream fstream = new FileInputStream(filename);
-                // Get the object
-                contents = getFileFromInputStream(fstream) ;
-                fstream.close();
-            }
-        } catch (Exception e){//Catch exception if any
+            InputStream fstream = Alice.getContext().getAssets().open(filename);
+            contents = getFileFromInputStream(fstream) ;
+            fstream.close();
+
+        } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
+
         //System.out.println("getFile: "+contents);
         return contents;
     }

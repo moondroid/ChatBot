@@ -43,15 +43,16 @@ public class Bot {
     public HashMap<String, AIMLSet> setMap = new HashMap<String, AIMLSet>();
     public HashMap<String, AIMLMap> mapMap = new HashMap<String, AIMLMap>();
     public HashSet<String> pronounSet = new HashSet<String>();
-    public String root_path = "c:/ab";
-    public String bot_path = root_path+"/bots";
-    public String bot_name_path = bot_path+"/super";
-    public String aimlif_path = bot_path+"/aimlif";
-    public String aiml_path = bot_path+"/aiml";
-    public String config_path = bot_path+"/config";
-    public String log_path = bot_path+"/log";
-    public String sets_path = bot_path+"/sets";
-    public String maps_path = bot_path+"/maps";
+//    public String root_path = "";
+//    public String bot_path = root_path+"/bots";
+//    public String bot_name_path = bot_path+"/super";
+    public String bot_name_path = "alice";
+    public String aimlif_path = bot_name_path+"/aimlif";
+    public String aiml_path = bot_name_path+"/aiml";
+    public String config_path = bot_name_path+"/config";
+    public String log_path = bot_name_path+"/log";
+    public String sets_path = bot_name_path+"/sets";
+    public String maps_path = bot_name_path+"/maps";
     /**
      * Set all directory path variables for this bot
      *
@@ -59,8 +60,9 @@ public class Bot {
      * @param name        name of bot
      */
     public void setAllPaths (String root, String name) {
-        bot_path = root+"/bots";
-        bot_name_path = bot_path+"/"+name;
+//        bot_path = root+"/bots";
+//        bot_name_path = bot_path+"/"+name;
+        bot_name_path = name;
         if (MagicBooleans.trace_mode) System.out.println("Name = "+name+" Path = "+bot_name_path);
         aiml_path = bot_name_path+"/aiml";
         aimlif_path = bot_name_path+"/aimlif";
@@ -69,8 +71,8 @@ public class Bot {
         sets_path = bot_name_path+"/sets";
         maps_path = bot_name_path+"/maps";
         if (MagicBooleans.trace_mode) {
-            System.out.println(root_path);
-            System.out.println(bot_path);
+//            System.out.println(root_path);
+//            System.out.println(bot_path);
             System.out.println(bot_name_path);
             System.out.println(aiml_path);
             System.out.println(aimlif_path);
@@ -143,9 +145,9 @@ public class Bot {
         AIMLMap plural = new AIMLMap(MagicStrings.map_plural, this);
         mapMap.put(MagicStrings.map_plural, plural);
         //System.out.println("setMap = "+setMap);
-        Date aimlDate = new Date(new File(aiml_path).lastModified());
-        Date aimlIFDate = new Date(new File(aimlif_path).lastModified());
-        if (MagicBooleans.trace_mode) System.out.println("AIML modified "+aimlDate+" AIMLIF modified "+aimlIFDate);
+//        Date aimlDate = new Date(new File(aiml_path).lastModified());
+//        Date aimlIFDate = new Date(new File(aimlif_path).lastModified());
+//        if (MagicBooleans.trace_mode) System.out.println("AIML modified "+aimlDate+" AIMLIF modified "+aimlIFDate);
         //readUnfinishedIFCategories();
         MagicStrings.pannous_api_key = Utilities.getPannousAPIKey(this);
         MagicStrings.pannous_login = Utilities.getPannousLogin(this);
@@ -155,11 +157,11 @@ public class Bot {
             if (MagicBooleans.trace_mode) System.out.println("Loading only AIMLIF files");
             cnt = addCategoriesFromAIMLIF();
         }
-        else if (aimlDate.after(aimlIFDate)) {
-            if (MagicBooleans.trace_mode) System.out.println("AIML modified after AIMLIF");
-            cnt = addCategoriesFromAIML();
-            writeAIMLIFFiles();
-        }
+//        else if (aimlDate.after(aimlIFDate)) {
+//            if (MagicBooleans.trace_mode) System.out.println("AIML modified after AIMLIF");
+//            cnt = addCategoriesFromAIML();
+//            writeAIMLIFFiles();
+//        }
         else {
             addCategoriesFromAIMLIF();
             if (brain.getCategories().size()==0) {

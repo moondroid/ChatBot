@@ -199,6 +199,7 @@ public class Eliza {
     private String[] loadStrings(String script){
         ArrayList<String> out_list = new ArrayList<String>();
         try {
+            parent.getAssets().openFd(script);
             InputStream is = parent.getAssets().open(script);
             // if file the available for reading
             if (is != null) {

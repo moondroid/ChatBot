@@ -3,6 +3,7 @@
     package="it.moondroid.chatbot" >
 
     <application
+        android:name=".ChatBotApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -16,6 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".LoadBrainService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

@@ -1,8 +1,14 @@
 package it.moondroid.chatbot;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import it.moondroid.chatbot.alice.Alice;
@@ -23,7 +30,7 @@ public class MainActivity extends Activity {
     private EditText chatEditText;
 
     //Eliza eliza;
-    Alice alice;
+    //Alice alice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +38,21 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //eliza = new Eliza(this);
-        alice = new Alice(this, new String[0]);
+        //alice = new Alice(this, new String[0]);
+
+        // The filter's action is BROADCAST_ACTION
+        IntentFilter mStatusIntentFilter = new IntentFilter(
+                Constants.BROADCAST_ACTION);
+        // Adds a data filter for the HTTP scheme
+        mStatusIntentFilter.addDataScheme("http");
+
+        // Instantiates a new DownloadStateReceiver
+        ResponseReceiver mResponseReceiver =
+                new ResponseReceiver();
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mResponseReceiver, mStatusIntentFilter);
+
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
 
@@ -53,7 +74,8 @@ public class MainActivity extends Activity {
                         @Override
                         public void run() {
                             //String response = eliza.processInput(question);
-                            String response = alice.processInput(question);
+                            //String response = alice.processInput(question);
+                            String response = "";
                             adapter.add(new ChatMessage(true, response));
                         }
                     }, 100);
@@ -90,5 +112,33 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    // Broadcast receiver for receiving status updates from the IntentService
+    private class ResponseReceiver extends BroadcastReceiver
+    {
+        // Prevents instantiation
+        private ResponseReceiver() {
+        }
+        // Called when the BroadcastReceiver gets an Intent it's registered to receive
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        /*
+         * Handle Intents here.
+         */
+          if (intent.getAction()==Constants.BROADCAST_ACTION){
+              int status = intent.getIntExtra(Constants.EXTENDED_DATA_STATUS, 0);
+              switch (status){
+                  case 1:
+                      Log.d("System.out", "brain loaded");
+                      Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
+                      break;
+
+              }
+          }
+
+        }
     }
 }

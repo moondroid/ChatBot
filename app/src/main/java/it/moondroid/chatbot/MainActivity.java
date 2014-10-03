@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
     private ChatArrayAdapter adapter;
     private EditText chatEditText;
 
-    Eliza eliza;
+    //Eliza eliza;
     Alice alice;
 
     @Override
@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        eliza = new Eliza(this);
+        //eliza = new Eliza(this);
         alice = new Alice(this, new String[0]);
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
@@ -52,10 +52,11 @@ public class MainActivity extends Activity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            String response = eliza.processInput(question);
+                            //String response = eliza.processInput(question);
+                            String response = alice.processInput(question);
                             adapter.add(new ChatMessage(true, response));
                         }
-                    }, 1000);
+                    }, 100);
 
                     return true;
                 }

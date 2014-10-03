@@ -84,10 +84,10 @@ public class Alice {
         //System.exit(0);
         if (bot.brain.getCategories().size() < MagicNumbers.brain_print_size) bot.brain.printgraph();
         if (MagicBooleans.trace_mode) System.out.println("Action = '"+action+"'");
-        if (action.equals("chat") || action.equals("chat-app")) {
-			boolean doWrites = ! action.equals("chat-app");
-			TestAB.testChat(bot, doWrites, MagicBooleans.trace_mode);
-		}
+//        if (action.equals("chat") || action.equals("chat-app")) {
+//			boolean doWrites = ! action.equals("chat-app");
+//			TestAB.testChat(bot, doWrites, MagicBooleans.trace_mode);
+//		}
         //else if (action.equals("test")) testSuite(bot, MagicStrings.root_path+"/data/find.txt");
         else if (action.equals("ab")) TestAB.testAB(bot, TestAB.sample_file);
         else if (action.equals("aiml2csv") || action.equals("csv2aiml")) convert(bot, action);

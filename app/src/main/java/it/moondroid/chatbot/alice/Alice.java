@@ -32,9 +32,20 @@ public class Alice {
 
     private static Context context;
     private static Bot bot;
+    private static Alice instance;
 
+    public static void setup(Context context){
+        instance = new Alice(context, new String[0]);
+    }
 
-    public Alice (Context context, String[] args) {
+    public static Alice getInstance(){
+        if (instance==null){
+            throw new UnsupportedOperationException("You forgot to call setup method to inizialize Alice brain");
+        }
+        return instance;
+    }
+
+    private Alice (Context context, String[] args) {
         this.context = context;
         MagicStrings.setRootPath();
 

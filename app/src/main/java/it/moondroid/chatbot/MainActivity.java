@@ -28,9 +28,8 @@ public class MainActivity extends Activity {
     private ListView chatListView;
     private ChatArrayAdapter adapter;
     private EditText chatEditText;
-
+    private static boolean isBrainLoaded = false;
     //Eliza eliza;
-    //Alice alice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         //eliza = new Eliza(this);
-        //alice = new Alice(this, new String[0]);
 
         // The filter's action is BROADCAST_ACTION
         IntentFilter mStatusIntentFilter = new IntentFilter(
@@ -71,12 +69,17 @@ public class MainActivity extends Activity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //String response = eliza.processInput(question);
-                            //String response = alice.processInput(question);
+
                             String response = "";
+                            if(isBrainLoaded){
+                                response = Alice.getInstance().processInput(question);
+                            }else {
+                                response = "My brain has not been loaded yet.";
+                            }
+
                             adapter.add(new ChatMessage(true, response));
                         }
-                    }, 100);
+                    }, 1000);
 
                     return true;
                 }
@@ -129,9 +132,9 @@ public class MainActivity extends Activity {
           if (intent.getAction()==Constants.BROADCAST_ACTION){
               int status = intent.getIntExtra(Constants.EXTENDED_DATA_STATUS, 0);
               switch (status){
-                  case 1:
-                      Log.d("System.out", "brain loaded");
+                  case Constants.STATUS_BRAIN_LOADED:
                       Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
+                      isBrainLoaded = true;
                       break;
 
               }

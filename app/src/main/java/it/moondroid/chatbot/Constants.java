@@ -13,4 +13,6 @@ public final class Constants {
     public static final String EXTENDED_DATA_STATUS =
             "it.moondroid.chatbot.STATUS";
 
+    public static final int STATUS_BRAIN_LOADED = 1;
+
 }

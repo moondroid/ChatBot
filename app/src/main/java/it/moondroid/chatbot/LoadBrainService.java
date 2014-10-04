@@ -25,12 +25,12 @@ public class LoadBrainService extends IntentService {
         // Do work here, based on the contents of dataString
         //...
 
-        Alice alice = new Alice(this, new String[0]);
+        Alice.setup(this);
 
         Intent localIntent =
                 new Intent(Constants.BROADCAST_ACTION)
                         // Puts the status into the Intent
-                        .putExtra(Constants.EXTENDED_DATA_STATUS, 1);
+                        .putExtra(Constants.EXTENDED_DATA_STATUS, Constants.STATUS_BRAIN_LOADED);
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }

@@ -25,6 +25,7 @@ import android.content.Context;
 import java.io.*;
 import java.util.HashMap;
 
+import it.moondroid.chatbot.BrainLogger;
 import it.moondroid.chatbot.alice.utils.IOUtils;
 
 
@@ -62,7 +63,12 @@ public class Alice {
         MagicBooleans.jp_tokenize = false;
         MagicBooleans.trace_mode = true;
         String action="chat";
-        System.out.println(MagicStrings.program_name_version);
+
+        if (MagicBooleans.trace_mode){
+            System.out.println(MagicStrings.program_name_version);
+            BrainLogger.getInstance().info(MagicStrings.program_name_version);
+        }
+
         for (String s : args) {
             //System.out.println(s);
             String[] splitArg = s.split("=");

@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import it.moondroid.chatbot.BrainLogger;
+
 /**
  * The AIML Pattern matching algorithm and data structure.
  *
@@ -656,7 +658,10 @@ public class Graphmaster {
         naryCnt = 0;
         nodeStatsGraph(root);
         resultNote = bot.name+" ("+name+"): "+getCategories().size()+" categories "+nodeCnt+" nodes "+singletonCnt+" singletons "+leafCnt+" leaves "+shortCutCnt+" shortcuts "+naryCnt+" n-ary "+nodeSize+" branches "+(float)nodeSize/(float)nodeCnt+" average branching ";
-        if (MagicBooleans.trace_mode) System.out.println(resultNote);
+        if (MagicBooleans.trace_mode){
+            System.out.println(resultNote);
+            BrainLogger.getInstance().info(resultNote);
+        }
     }
     public void nodeStatsGraph(Nodemapper node) {
         if (node != null) {

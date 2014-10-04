@@ -1,6 +1,7 @@
 package it.moondroid.chatbot;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 
 import it.moondroid.chatbot.alice.Alice;
-import it.moondroid.chatbot.eliza.Eliza;
 
 
 public class MainActivity extends Activity {
@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     private static ChatArrayAdapter adapter;
     private EditText chatEditText;
     private static boolean isBrainLoaded = false;
+    private BrainLoggerDialog dialog;
     //Eliza eliza;
 
     @Override
@@ -49,8 +50,13 @@ public class MainActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mResponseReceiver, mStatusIntentFilter);
 
-        if (savedInstanceState==null){
+
+        if (savedInstanceState == null) {
             adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
+
+            FragmentManager fm = getFragmentManager();
+            dialog = new BrainLoggerDialog();
+            dialog.show(fm, "BrainLoggerDialog");
         }
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
@@ -72,9 +78,9 @@ public class MainActivity extends Activity {
                         public void run() {
 
                             String response = "";
-                            if(isBrainLoaded){
+                            if (isBrainLoaded) {
                                 response = Alice.getInstance().processInput(question);
-                            }else {
+                            } else {
                                 response = "My brain has not been loaded yet.";
                             }
 
@@ -118,11 +124,11 @@ public class MainActivity extends Activity {
 
 
     // Broadcast receiver for receiving status updates from the IntentService
-    private class ResponseReceiver extends BroadcastReceiver
-    {
+    private class ResponseReceiver extends BroadcastReceiver {
         // Prevents instantiation
         private ResponseReceiver() {
         }
+
         // Called when the BroadcastReceiver gets an Intent it's registered to receive
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -130,17 +136,31 @@ public class MainActivity extends Activity {
         /*
          * Handle Intents here.
          */
-          if (intent.getAction()==Constants.BROADCAST_ACTION){
-              int status = intent.getIntExtra(Constants.EXTENDED_DATA_STATUS, 0);
-              switch (status){
-                  case Constants.STATUS_BRAIN_LOADED:
-                      Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
-                      isBrainLoaded = true;
-                      break;
+            if (intent.getAction() == Constants.BROADCAST_ACTION) {
 
-              }
-          }
+                int status = intent.getIntExtra(Constants.EXTENDED_BRAIN_STATUS, 0);
+                switch (status) {
+                    case Constants.STATUS_BRAIN_LOADED:
+                        Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
+                        isBrainLoaded = true;
+                        break;
+
+                }
+
+                String info = intent.getStringExtra(Constants.EXTENDED_LOGGER_INFO);
+                if (info != null) {
+                    Log.i("EXTENDED_LOGGER_INFO", info);
+                    if (dialog!=null){
+                        dialog.addLine(info);
+                    }
+                }
+            }
+
 
         }
     }
+
+
+
+
 }

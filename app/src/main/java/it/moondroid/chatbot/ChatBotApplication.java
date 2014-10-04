@@ -13,8 +13,9 @@ public class ChatBotApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        BrainLogger.setup(this);
+
         Intent loadBrainIntent = new Intent(this, LoadBrainService.class);
-        //loadBrainIntent.setData(Uri.parse(dataUrl));
         startService(loadBrainIntent);
     }
 }

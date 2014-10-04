@@ -23,6 +23,8 @@ package it.moondroid.chatbot.alice;
 import java.io.*;
 import java.util.*;
 
+import it.moondroid.chatbot.BrainLogger;
+
 
 /**
  * Class representing the AIML bot
@@ -227,10 +229,16 @@ public class Bot {
 
         try {
             String[] listOfFiles = Alice.getContext().getAssets().list(aiml_path);
-            if (MagicBooleans.trace_mode) System.out.println("Loading AIML files from "+aiml_path);
+            if (MagicBooleans.trace_mode){
+                System.out.println("Loading AIML files from "+aiml_path);
+                BrainLogger.getInstance().info("Loading AIML files from "+aiml_path);
+            }
             for (String file : listOfFiles) {
                 if (file.endsWith(".aiml") || file.endsWith(".AIML")) {
-                    if (MagicBooleans.trace_mode) System.out.println(file);
+                    if (MagicBooleans.trace_mode) {
+                        System.out.println(file);
+                        BrainLogger.getInstance().info("Reading AIML category "+file);
+                    }
                     try {
                         ArrayList<Category> moreCategories = AIMLProcessor.AIMLToCategories(aiml_path, file);
                         addMoreCategories(file, moreCategories);
@@ -247,7 +255,10 @@ public class Bot {
         }
 
 
-        if (MagicBooleans.trace_mode) System.out.println("Loaded " + cnt + " categories in " + timer.elapsedTimeSecs() + " sec");
+        if (MagicBooleans.trace_mode){
+            System.out.println("Loaded " + cnt + " categories in " + timer.elapsedTimeSecs() + " sec");
+            BrainLogger.getInstance().info("Loaded " + cnt + " categories in " + timer.elapsedTimeSecs() + " sec");
+        }
         return cnt;
     }
 
@@ -549,8 +560,11 @@ public class Bot {
 
         try {
             String[] listOfFiles = Alice.getContext().getAssets().list(sets_path);
-            if (MagicBooleans.trace_mode)
+            if (MagicBooleans.trace_mode){
                 System.out.println("Loading AIML Sets files from " + sets_path);
+                BrainLogger.getInstance().info("Loading AIML Sets files from " + sets_path);
+            }
+
             for (String file : listOfFiles) {
 
                 if (file.endsWith(".txt") || file.endsWith(".TXT")) {
@@ -581,8 +595,11 @@ public class Bot {
 
         try {
             String[] listOfFiles = Alice.getContext().getAssets().list(maps_path);
-            if (MagicBooleans.trace_mode)
+            if (MagicBooleans.trace_mode){
                 System.out.println("Loading AIML Map files from " + maps_path);
+                BrainLogger.getInstance().info("Loading AIML Map files from " + maps_path);
+            }
+
             for (String file : listOfFiles) {
 
                 if (file.endsWith(".txt") || file.endsWith(".TXT")) {

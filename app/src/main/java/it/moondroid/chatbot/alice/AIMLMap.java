@@ -22,7 +22,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-   /**
+import it.moondroid.chatbot.BrainLogger;
+
+/**
     * implements AIML Map
     *
     * A map is a function from one string set to another.
@@ -163,7 +165,10 @@ public class AIMLMap extends HashMap<String, String> {
         */
     public int readAIMLMap (Bot bot) {
         int cnt = 0;
-        if (MagicBooleans.trace_mode) System.out.println("Reading AIML Map "+bot.maps_path+"/"+mapName+".txt");
+        if (MagicBooleans.trace_mode){
+            System.out.println("Reading AIML Map "+bot.maps_path+"/"+mapName+".txt");
+            BrainLogger.getInstance().info("Reading AIML Map "+bot.maps_path+"/"+mapName+".txt");
+        }
 
         try {
             InputStream fstream = Alice.getContext().getAssets().open(bot.maps_path+"/"+mapName+".txt");

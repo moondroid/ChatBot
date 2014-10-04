@@ -10,9 +10,12 @@ public final class Constants {
             "it.moondroid.chatbot.BROADCAST";
 
     // Defines the key for the status "extra" in an Intent
-    public static final String EXTENDED_DATA_STATUS =
-            "it.moondroid.chatbot.STATUS";
+    public static final String EXTENDED_BRAIN_STATUS =
+            "it.moondroid.chatbot.BRAIN_STATUS";
 
     public static final int STATUS_BRAIN_LOADED = 1;
+
+    public static final String EXTENDED_LOGGER_INFO =
+            "it.moondroid.chatbot.LOGGER_INFO";
 
 }

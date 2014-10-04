@@ -2,7 +2,6 @@ package it.moondroid.chatbot;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.provider.SyncStateContract;
 import android.support.v4.content.LocalBroadcastManager;
 
 import it.moondroid.chatbot.alice.Alice;
@@ -30,7 +29,7 @@ public class LoadBrainService extends IntentService {
         Intent localIntent =
                 new Intent(Constants.BROADCAST_ACTION)
                         // Puts the status into the Intent
-                        .putExtra(Constants.EXTENDED_DATA_STATUS, Constants.STATUS_BRAIN_LOADED);
+                        .putExtra(Constants.EXTENDED_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }

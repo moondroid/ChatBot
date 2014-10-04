@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import it.moondroid.chatbot.BrainLogger;
+
 /**
  * implements AIML Sets
  */
@@ -125,7 +127,10 @@ public class AIMLSet extends HashSet<String> {
 
     public int readAIMLSet (Bot bot) {
         int cnt=0;
-        if (MagicBooleans.trace_mode) System.out.println("Reading AIML Set "+bot.sets_path+"/"+setName+".txt");
+        if (MagicBooleans.trace_mode){
+            System.out.println("Reading AIML Set "+bot.sets_path+"/"+setName+".txt");
+            BrainLogger.getInstance().info("Reading AIML Set "+bot.sets_path+"/"+setName+".txt");
+        }
 
         try {
             // Open the file that is the first

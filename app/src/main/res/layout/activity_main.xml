@@ -13,7 +13,8 @@
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
         android:dividerHeight="1dp"
-        android:listSelector="@android:color/transparent">
+        android:listSelector="@android:color/transparent"
+        android:transcriptMode="alwaysScroll" >
     </ListView>
 
     <RelativeLayout

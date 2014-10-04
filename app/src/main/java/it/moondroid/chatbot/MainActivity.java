@@ -43,8 +43,6 @@ public class MainActivity extends Activity {
         // The filter's action is BROADCAST_ACTION
         IntentFilter mStatusIntentFilter = new IntentFilter(
                 Constants.BROADCAST_ACTION);
-        // Adds a data filter for the HTTP scheme
-        mStatusIntentFilter.addDataScheme("http");
 
         // Instantiates a new DownloadStateReceiver
         ResponseReceiver mResponseReceiver =

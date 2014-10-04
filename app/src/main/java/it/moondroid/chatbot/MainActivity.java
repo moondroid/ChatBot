@@ -26,7 +26,7 @@ import it.moondroid.chatbot.eliza.Eliza;
 public class MainActivity extends Activity {
 
     private ListView chatListView;
-    private ChatArrayAdapter adapter;
+    private static ChatArrayAdapter adapter;
     private EditText chatEditText;
     private static boolean isBrainLoaded = false;
     //Eliza eliza;
@@ -49,10 +49,11 @@ public class MainActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mResponseReceiver, mStatusIntentFilter);
 
+        if (savedInstanceState==null){
+            adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
+        }
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
-
-        adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
         chatListView.setAdapter(adapter);
 
         chatEditText = (EditText) findViewById(R.id.chat_editText);

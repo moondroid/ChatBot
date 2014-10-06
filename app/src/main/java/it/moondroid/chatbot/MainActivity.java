@@ -44,6 +44,9 @@ public class MainActivity extends Activity {
             FragmentManager fm = getFragmentManager();
             dialog = new BrainLoggerDialog();
             dialog.show(fm, "BrainLoggerDialog");
+        } else {
+            FragmentManager fm = getFragmentManager();
+            dialog = (BrainLoggerDialog) fm.findFragmentByTag("BrainLoggerDialog");
         }
 
         chatListView = (ListView) findViewById(R.id.chat_listView);

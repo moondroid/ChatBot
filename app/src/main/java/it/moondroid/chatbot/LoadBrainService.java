@@ -18,16 +18,11 @@ public class LoadBrainService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent workIntent) {
-        // Gets data from the incoming Intent
-        String dataString = workIntent.getDataString();
-        //...
-        // Do work here, based on the contents of dataString
-        //...
 
         Alice.setup(this);
 
         Intent localIntent =
-                new Intent(Constants.BROADCAST_ACTION)
+                new Intent(Constants.BROADCAST_ACTION_BRAIN_LOADING)
                         // Puts the status into the Intent
                         .putExtra(Constants.EXTENDED_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
         // Broadcasts the Intent to receivers in this app.

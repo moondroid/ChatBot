@@ -30,26 +30,13 @@ public class MainActivity extends Activity {
     private EditText chatEditText;
     private static boolean isBrainLoaded = false;
     private BrainLoggerDialog dialog;
-    //Eliza eliza;
+    private ResponseReceiver mMessageReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //eliza = new Eliza(this);
-
-        // The filter's action is BROADCAST_ACTION
-        IntentFilter mStatusIntentFilter = new IntentFilter(
-                Constants.BROADCAST_ACTION);
-
-        // Instantiates a new DownloadStateReceiver
-        ResponseReceiver mResponseReceiver =
-                new ResponseReceiver();
-        // Registers the DownloadStateReceiver and its intent filters
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                mResponseReceiver, mStatusIntentFilter);
-
 
         if (savedInstanceState == null) {
             adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
@@ -99,6 +86,27 @@ public class MainActivity extends Activity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Register mMessageReceiver to receive messages.
+        IntentFilter intentFilter = new IntentFilter(
+                Constants.BROADCAST_ACTION_BRAIN_LOADING);
+        intentFilter.addAction(Constants.BROADCAST_ACTION_LOGGER);
+
+        mMessageReceiver = new ResponseReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is not visible
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+
+        super.onPause();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,7 +133,7 @@ public class MainActivity extends Activity {
 
     // Broadcast receiver for receiving status updates from the IntentService
     private class ResponseReceiver extends BroadcastReceiver {
-        // Prevents instantiation
+
         private ResponseReceiver() {
         }
 
@@ -133,10 +141,7 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-        /*
-         * Handle Intents here.
-         */
-            if (intent.getAction() == Constants.BROADCAST_ACTION) {
+            if (intent.getAction() == Constants.BROADCAST_ACTION_BRAIN_LOADING) {
 
                 int status = intent.getIntExtra(Constants.EXTENDED_BRAIN_STATUS, 0);
                 switch (status) {
@@ -146,14 +151,18 @@ public class MainActivity extends Activity {
                         break;
 
                 }
+            }
+
+            if (intent.getAction() == Constants.BROADCAST_ACTION_LOGGER) {
 
                 String info = intent.getStringExtra(Constants.EXTENDED_LOGGER_INFO);
                 if (info != null) {
                     Log.i("EXTENDED_LOGGER_INFO", info);
-                    if (dialog!=null){
+                    if (dialog != null) {
                         dialog.addLine(info);
                     }
                 }
+
             }
 
 

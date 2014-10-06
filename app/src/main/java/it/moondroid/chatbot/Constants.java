@@ -6,8 +6,10 @@ package it.moondroid.chatbot;
 public final class Constants {
 
     // Defines a custom Intent action
-    public static final String BROADCAST_ACTION =
-            "it.moondroid.chatbot.BROADCAST";
+    public static final String BROADCAST_ACTION_BRAIN_LOADING =
+            "it.moondroid.chatbot.BROADCAST_ACTION_BRAIN_LOADING";
+    public static final String BROADCAST_ACTION_LOGGER =
+            "it.moondroid.chatbot.BROADCAST_ACTION_LOGGER";
 
     // Defines the key for the status "extra" in an Intent
     public static final String EXTENDED_BRAIN_STATUS =

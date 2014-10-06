@@ -38,7 +38,7 @@ public class BrainLogger {
 
     private void notify(String line){
         Intent localIntent =
-                new Intent(Constants.BROADCAST_ACTION)
+                new Intent(Constants.BROADCAST_ACTION_LOGGER)
                         // Puts the status into the Intent
                         .putExtra(Constants.EXTENDED_LOGGER_INFO, line);
         // Broadcasts the Intent to receivers in this app.

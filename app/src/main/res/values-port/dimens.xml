@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="dialog_logger_height">400dp</dimen>
+
+</resources>

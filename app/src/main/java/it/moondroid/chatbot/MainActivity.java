@@ -64,21 +64,25 @@ public class MainActivity extends Activity {
                     adapter.add(new ChatMessage(false, question));
                     chatEditText.setText("");
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+//                    Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            String response = "";
+//                            if (isBrainLoaded) {
+//                                response = Alice.getInstance().processInput(question);
+//                            } else {
+//                                response = "My brain has not been loaded yet.";
+//                            }
+//
+//                            adapter.add(new ChatMessage(true, response));
+//                        }
+//                    }, 1000);
 
-                            String response = "";
-                            if (isBrainLoaded) {
-                                response = Alice.getInstance().processInput(question);
-                            } else {
-                                response = "My brain has not been loaded yet.";
-                            }
-
-                            adapter.add(new ChatMessage(true, response));
-                        }
-                    }, 1000);
+                    Intent brainIntent = new Intent(MainActivity.this, BrainService.class);
+                    brainIntent.putExtra(BrainService.KEY_QUESTION, question);
+                    startService(brainIntent);
 
                     return true;
                 }
@@ -98,6 +102,7 @@ public class MainActivity extends Activity {
         // Register mMessageReceiver to receive messages.
         IntentFilter intentFilter = new IntentFilter(
                 Constants.BROADCAST_ACTION_BRAIN_LOADING);
+        intentFilter.addAction(Constants.BROADCAST_ACTION_BRAIN_ANSWER);
         intentFilter.addAction(Constants.BROADCAST_ACTION_LOGGER);
 
         mMessageReceiver = new ResponseReceiver();
@@ -159,6 +164,11 @@ public class MainActivity extends Activity {
                         break;
 
                 }
+            }
+
+            if (intent.getAction() == Constants.BROADCAST_ACTION_BRAIN_ANSWER) {
+                String answer = intent.getStringExtra(Constants.EXTRA_BRAIN_ANSWER);
+                adapter.add(new ChatMessage(true, answer));
             }
 
             if (intent.getAction() == Constants.BROADCAST_ACTION_LOGGER) {

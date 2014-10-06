@@ -22,6 +22,10 @@
             android:name=".LoadBrainService"
             android:exported="false"/>
 
+        <service android:name=".BrainService"
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name" />
+
     </application>
 
 </manifest>

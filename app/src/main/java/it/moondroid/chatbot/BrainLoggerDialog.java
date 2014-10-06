@@ -13,6 +13,8 @@ import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import it.moondroid.chatbot.R;
 
 /**
@@ -35,6 +37,8 @@ public class BrainLoggerDialog extends DialogFragment {
             if(savedInstanceState!=null){
                 String text = savedInstanceState.getString("log");
                 tv.setText(text!=null? text : "");
+            }else {
+                loadLog();
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -90,4 +94,10 @@ public class BrainLoggerDialog extends DialogFragment {
         }
     }
 
+    private void loadLog(){
+        ArrayList<String> logs = (ArrayList<String>) BrainLogger.getInstance().getLogs().clone();
+        for(String log : logs){
+            addLine(log);
+        }
+    }
 }

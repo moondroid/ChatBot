@@ -25,6 +25,8 @@ import it.moondroid.chatbot.alice.Alice;
 
 public class MainActivity extends Activity {
 
+    private static final String FRAGMENT_DIALOG_LOG_TAG = "BrainLoggerDialog";
+
     private ListView chatListView;
     private static ChatArrayAdapter adapter;
     private EditText chatEditText;
@@ -43,10 +45,10 @@ public class MainActivity extends Activity {
 
             FragmentManager fm = getFragmentManager();
             dialog = new BrainLoggerDialog();
-            dialog.show(fm, "BrainLoggerDialog");
+            dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
         } else {
             FragmentManager fm = getFragmentManager();
-            dialog = (BrainLoggerDialog) fm.findFragmentByTag("BrainLoggerDialog");
+            dialog = (BrainLoggerDialog) fm.findFragmentByTag(FRAGMENT_DIALOG_LOG_TAG);
         }
 
         chatListView = (ListView) findViewById(R.id.chat_listView);
@@ -126,7 +128,10 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log) {
+            FragmentManager fm = getFragmentManager();
+            dialog = new BrainLoggerDialog();
+            dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
             return true;
         }
 

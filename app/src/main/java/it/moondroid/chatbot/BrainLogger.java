@@ -36,6 +36,10 @@ public class BrainLogger {
         notify(line);
     }
 
+    public ArrayList<String> getLogs(){
+        return logs;
+    }
+
     private void notify(String line){
         Intent localIntent =
                 new Intent(Constants.BROADCAST_ACTION_LOGGER)

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,9 +19,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import it.moondroid.chatbot.alice.Alice;
-
-
 public class MainActivity extends Activity {
 
     private static final String FRAGMENT_DIALOG_LOG_TAG = "BrainLoggerDialog";
@@ -30,7 +26,6 @@ public class MainActivity extends Activity {
     private ListView chatListView;
     private static ChatArrayAdapter adapter;
     private EditText chatEditText;
-    private static boolean isBrainLoaded = false;
     private BrainLoggerDialog dialog;
     private ResponseReceiver mMessageReceiver;
 
@@ -40,14 +35,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentManager fm = getFragmentManager();
+
         if (savedInstanceState == null) {
             adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
 
-            FragmentManager fm = getFragmentManager();
             dialog = new BrainLoggerDialog();
-            dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
+            //dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
         } else {
-            FragmentManager fm = getFragmentManager();
             dialog = (BrainLoggerDialog) fm.findFragmentByTag(FRAGMENT_DIALOG_LOG_TAG);
         }
 
@@ -64,24 +59,8 @@ public class MainActivity extends Activity {
                     adapter.add(new ChatMessage(false, question));
                     chatEditText.setText("");
 
-//                    Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            String response = "";
-//                            if (isBrainLoaded) {
-//                                response = Alice.getInstance().processInput(question);
-//                            } else {
-//                                response = "My brain has not been loaded yet.";
-//                            }
-//
-//                            adapter.add(new ChatMessage(true, response));
-//                        }
-//                    }, 1000);
-
                     Intent brainIntent = new Intent(MainActivity.this, BrainService.class);
-                    brainIntent.putExtra(BrainService.KEY_QUESTION, question);
+                    brainIntent.putExtra(BrainService.COMMAND_QUESTION, question);
                     startService(brainIntent);
 
                     return true;
@@ -132,7 +111,6 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_log) {
             FragmentManager fm = getFragmentManager();
             dialog = new BrainLoggerDialog();
@@ -160,7 +138,6 @@ public class MainActivity extends Activity {
                 switch (status) {
                     case Constants.STATUS_BRAIN_LOADED:
                         Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
-                        isBrainLoaded = true;
                         break;
 
                 }

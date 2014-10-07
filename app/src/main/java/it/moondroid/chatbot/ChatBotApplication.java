@@ -15,11 +15,8 @@ public class ChatBotApplication extends Application {
 
         BrainLogger.setup(this);
 
-//        Intent loadBrainIntent = new Intent(this, LoadBrainService.class);
-//        startService(loadBrainIntent);
-
         Intent brainIntent = new Intent(this, BrainService.class);
-        brainIntent.putExtra("KEY1", "Value to be used by the service");
+        brainIntent.putExtra(BrainService.COMMAND_ACTION, BrainService.ACTION_START);
         startService(brainIntent);
     }
 }

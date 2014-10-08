@@ -46,7 +46,8 @@ public class BrainLoggerDialog extends DialogFragment {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                     .setView(myScrollView)
-                    .setTitle("Loading Brain")
+                    .setTitle("ChatBot")
+                    .setIcon(R.drawable.ic_bot)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @TargetApi(11)
                         public void onClick(DialogInterface dialog, int id) {

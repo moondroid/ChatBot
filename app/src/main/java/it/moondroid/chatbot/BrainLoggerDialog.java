@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -57,7 +58,9 @@ public class BrainLoggerDialog extends DialogFragment {
 
             setCancelable(false);
             // Create the AlertDialog object and return it
-            return builder.create();
+            AlertDialog dialog = builder.create();
+            //dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+            return dialog;
     }
 
     @Override
@@ -73,6 +76,10 @@ public class BrainLoggerDialog extends DialogFragment {
         int dialogHeight = (int) getResources().getDimension(R.dimen.dialog_logger_height);
 
         getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+
+
+        Button buttonOk = ((AlertDialog)getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
+        buttonOk.setEnabled(false);
     }
 
     @Override
@@ -108,6 +115,11 @@ public class BrainLoggerDialog extends DialogFragment {
             tv.append(text+"\n");
             myScrollView.fullScroll(View.FOCUS_DOWN);
         }
+    }
+
+    public void setPositiveButtonEnabled(boolean enabled){
+        Button buttonOk = ((AlertDialog)getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
+        buttonOk.setEnabled(enabled);
     }
 
     private void loadLog(){

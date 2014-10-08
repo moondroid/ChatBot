@@ -152,6 +152,9 @@ public class MainActivity extends Activity {
 
                     case Constants.STATUS_BRAIN_LOADED:
                         Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
+                        if(dialog!=null){
+                            dialog.setPositiveButtonEnabled(true);
+                        }
                         break;
 
                 }

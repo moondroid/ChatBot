@@ -123,7 +123,8 @@ public class BrainLoggerDialog extends DialogFragment {
         buttonOk.setEnabled(enabled);
     }
 
-    private void loadLog(){
+    public void loadLog(){
+        tv.setText("");
         ArrayList<String> logs = (ArrayList<String>) BrainLogger.getInstance().getLogs().clone();
         for(String log : logs){
             addLine(log);

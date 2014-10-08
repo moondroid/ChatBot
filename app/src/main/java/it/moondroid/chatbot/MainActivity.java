@@ -95,6 +95,11 @@ public class MainActivity extends Activity {
         mMessageReceiver = new ResponseReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver, intentFilter);
+
+        if(dialog!=null && ChatBotApplication.isBrainLoaded()){
+            dialog.loadLog();
+            dialog.setPositiveButtonEnabled(true);
+        }
     }
 
     @Override

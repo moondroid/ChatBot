@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public class BrainLoggerDialog extends DialogFragment {
 
     private ScrollView myScrollView;
     private TextView tv;
+    private boolean shown = false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -85,6 +87,20 @@ public class BrainLoggerDialog extends DialogFragment {
         if (getDialog() != null && getRetainInstance())
             getDialog().setDismissMessage(null);
         super.onDestroyView();
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        if (shown) return;
+
+        super.show(manager, tag);
+        shown = true;
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        shown = false;
+        super.onDismiss(dialog);
     }
 
     public void addLine(String text) {

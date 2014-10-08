@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,6 +26,9 @@ public class BrainService extends Service {
     private static final int NOTIFICATION_ID = 1337;
 
     private static Alice alice;
+
+    // Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
 
     @Override
     public void onCreate() {
@@ -70,6 +74,7 @@ public class BrainService extends Service {
 
         if(action.equalsIgnoreCase(ACTION_STOP)){
             Log.d("BrainService","onStartCommand() ACTION_STOP");
+            stopForeground(true);
             stopSelf();
             return Service.START_NOT_STICKY;
         }
@@ -85,13 +90,19 @@ public class BrainService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         //TODO for communication return IBinder implementation
-        return null;
+        //return null;
+        return mBinder;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d("BrainService", "onDestroy()");
+    }
+
+    /** method for clients */
+    public boolean isBrainLoaded() {
+        return alice!=null;
     }
 
     private final class LoadBrainThread extends Thread {
@@ -177,4 +188,18 @@ public class BrainService extends Service {
 
         startForeground(NOTIFICATION_ID, note);
     }
+
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+        BrainService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return BrainService.this;
+        }
+    }
+
+
+
 }

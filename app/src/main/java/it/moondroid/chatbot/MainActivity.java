@@ -38,11 +38,16 @@ public class MainActivity extends Activity {
         FragmentManager fm = getFragmentManager();
 
         if (savedInstanceState == null) {
+            Log.d("MainActivity", "onCreate savedInstanceState null");
             adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
 
             dialog = new BrainLoggerDialog();
-            //dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
+            if(!ChatBotApplication.isBrainLoaded()){
+                dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
+            }
+
         } else {
+            Log.d("MainActivity", "onCreate savedInstanceState NOT null");
             dialog = (BrainLoggerDialog) fm.findFragmentByTag(FRAGMENT_DIALOG_LOG_TAG);
         }
 

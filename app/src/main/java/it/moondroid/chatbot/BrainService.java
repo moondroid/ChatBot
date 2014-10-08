@@ -155,7 +155,7 @@ public class BrainService extends Service {
                         .setAutoCancel(false)
                         .setContentIntent(openPIntent)
                         .setWhen(System.currentTimeMillis())
-                        .addAction(R.drawable.ic_stat_reload, "Restart", restartPIntent)
+                        //.addAction(R.drawable.ic_stat_reload, "Restart", restartPIntent)
                         .addAction(R.drawable.ic_stat_stop, "Stop", stopPIntent)
                         .build();
 
@@ -174,7 +174,7 @@ public class BrainService extends Service {
 
         Notification note =
                 new NotificationCompat.Builder(BrainService.this)
-                        .setSmallIcon(R.drawable.ic_stat_notify_chat)
+                        .setSmallIcon(R.drawable.ic_stat_loading)
                         .setTicker("Loading Brain")
                         .setContentTitle("Alice Brain")
                         .setContentText("Loading...")

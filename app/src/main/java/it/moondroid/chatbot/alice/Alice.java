@@ -35,8 +35,9 @@ public class Alice {
     private static Bot bot;
     private static Alice instance;
 
-    public static void setup(Context context){
+    public static Alice setup(Context context){
         instance = new Alice(context, new String[0]);
+        return instance;
     }
 
     public static Alice getInstance(){

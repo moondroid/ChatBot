@@ -44,7 +44,6 @@ public class BrainLoggerDialog extends DialogFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                     .setView(myScrollView)
                     .setTitle("Loading Brain")
-                    .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @TargetApi(11)
                         public void onClick(DialogInterface dialog, int id) {
@@ -54,6 +53,7 @@ public class BrainLoggerDialog extends DialogFragment {
                     });
 
 
+            setCancelable(false);
             // Create the AlertDialog object and return it
             return builder.create();
     }

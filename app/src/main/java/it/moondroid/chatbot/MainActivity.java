@@ -60,7 +60,8 @@ public class MainActivity extends Activity {
                     chatEditText.setText("");
 
                     Intent brainIntent = new Intent(MainActivity.this, BrainService.class);
-                    brainIntent.putExtra(BrainService.COMMAND_QUESTION, question);
+                    brainIntent.setAction(BrainService.ACTION_QUESTION);
+                    brainIntent.putExtra(BrainService.EXTRA_QUESTION, question);
                     startService(brainIntent);
 
                     return true;
@@ -80,7 +81,7 @@ public class MainActivity extends Activity {
 
         // Register mMessageReceiver to receive messages.
         IntentFilter intentFilter = new IntentFilter(
-                Constants.BROADCAST_ACTION_BRAIN_LOADING);
+                Constants.BROADCAST_ACTION_BRAIN_STATUS);
         intentFilter.addAction(Constants.BROADCAST_ACTION_BRAIN_ANSWER);
         intentFilter.addAction(Constants.BROADCAST_ACTION_LOGGER);
 
@@ -132,10 +133,18 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            if (intent.getAction() == Constants.BROADCAST_ACTION_BRAIN_LOADING) {
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_ACTION_BRAIN_STATUS)) {
 
-                int status = intent.getIntExtra(Constants.EXTENDED_BRAIN_STATUS, 0);
+                int status = intent.getIntExtra(Constants.EXTRA_BRAIN_STATUS, 0);
                 switch (status) {
+
+                    case Constants.STATUS_BRAIN_LOADING:
+                        Toast.makeText(MainActivity.this, "brain loading", Toast.LENGTH_SHORT).show();
+                        if(dialog!=null){
+                            dialog.show(getFragmentManager(), FRAGMENT_DIALOG_LOG_TAG);
+                        }
+                        break;
+
                     case Constants.STATUS_BRAIN_LOADED:
                         Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
                         break;
@@ -143,12 +152,12 @@ public class MainActivity extends Activity {
                 }
             }
 
-            if (intent.getAction() == Constants.BROADCAST_ACTION_BRAIN_ANSWER) {
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_ACTION_BRAIN_ANSWER)) {
                 String answer = intent.getStringExtra(Constants.EXTRA_BRAIN_ANSWER);
                 adapter.add(new ChatMessage(true, answer));
             }
 
-            if (intent.getAction() == Constants.BROADCAST_ACTION_LOGGER) {
+            if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_ACTION_LOGGER)) {
 
                 String info = intent.getStringExtra(Constants.EXTENDED_LOGGER_INFO);
                 if (info != null) {

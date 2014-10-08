@@ -22,9 +22,9 @@ public class LoadBrainService extends IntentService {
         Alice.setup(this);
 
         Intent localIntent =
-                new Intent(Constants.BROADCAST_ACTION_BRAIN_LOADING)
+                new Intent(Constants.BROADCAST_ACTION_BRAIN_STATUS)
                         // Puts the status into the Intent
-                        .putExtra(Constants.EXTENDED_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
+                        .putExtra(Constants.EXTRA_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
     }

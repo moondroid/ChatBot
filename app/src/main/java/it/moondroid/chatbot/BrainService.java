@@ -16,52 +16,66 @@ import it.moondroid.chatbot.alice.Alice;
  */
 public class BrainService extends Service {
 
-    public static final String COMMAND_QUESTION = "it.moondroid.chatbot.BrainService.COMMAND_QUESTION";
-    public static final String COMMAND_ACTION = "it.moondroid.chatbot.BrainService.COMMAND_ACTION";
-    public static final int ACTION_START = 1;
-    public static final int ACTION_STOP = -1;
+    public static final String ACTION_QUESTION = "it.moondroid.chatbot.BrainService.ACTION_QUESTION";
+    public static final String ACTION_STOP = "it.moondroid.chatbot.BrainService.ACTION_STOP";
+    public static final String ACTION_START = "it.moondroid.chatbot.BrainService.ACTION_START";
+
+    public static final String EXTRA_QUESTION = "it.moondroid.chatbot.BrainService.EXTRA_QUESTION";
+
     private static final int NOTIFICATION_ID = 1337;
-    private static boolean isBrainLoaded = false;
+
+    private static Alice alice;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("BrainService","onCreate()");
-        //TODO
-        //(new LoadBrainThread()).start();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         if (intent==null){
+            Log.d("BrainService","onStartCommand() null");
             return Service.START_STICKY;
         }
 
-        String question = intent.getStringExtra(COMMAND_QUESTION);
-        if(question!=null){
-            Log.d("BrainService","onStartCommand() question:"+question);
-            String answer = "";
-            if (isBrainLoaded) {
-                answer = Alice.getInstance().processInput(question);
-            } else {
-                answer = "My brain has not been loaded yet.";
+        String action = intent.getAction();
+
+        if(action.equalsIgnoreCase(ACTION_QUESTION)){
+
+            String question = intent.getStringExtra(EXTRA_QUESTION);
+            if(question!=null){
+                Log.d("BrainService","onStartCommand() question:"+question);
+                String answer = "";
+                if (alice!=null) {
+                    answer = alice.processInput(question);
+                } else {
+                    answer = "My brain has not been loaded yet.";
+                }
+
+                Intent localIntent =
+                        new Intent(Constants.BROADCAST_ACTION_BRAIN_ANSWER)
+                                // Puts the answer into the Intent
+                                .putExtra(Constants.EXTRA_BRAIN_ANSWER, answer);
+                // Broadcasts the Intent to receivers in this app.
+                LocalBroadcastManager.getInstance(BrainService.this).sendBroadcast(localIntent);
+
             }
 
-            Intent localIntent =
-                    new Intent(Constants.BROADCAST_ACTION_BRAIN_ANSWER)
-                            // Puts the answer into the Intent
-                            .putExtra(Constants.EXTRA_BRAIN_ANSWER, answer);
-            // Broadcasts the Intent to receivers in this app.
-            LocalBroadcastManager.getInstance(BrainService.this).sendBroadcast(localIntent);
+            return Service.START_STICKY;
+
         }
 
-        int action = intent.getIntExtra(COMMAND_ACTION, 0);
-        Log.d("BrainService","onStartCommand() action: "+action);
-        if(action==ACTION_STOP){
+
+        if(action.equalsIgnoreCase(ACTION_STOP)){
+            Log.d("BrainService","onStartCommand() ACTION_STOP");
             stopSelf();
+            return Service.START_NOT_STICKY;
         }
-        if(action==ACTION_START){
+
+        if(action.equalsIgnoreCase(ACTION_START) && alice==null){
+            Log.d("BrainService","onStartCommand() ACTION_START");
             (new LoadBrainThread()).start();
         }
 
@@ -78,53 +92,89 @@ public class BrainService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d("BrainService", "onDestroy()");
-        isBrainLoaded = false;
-        stopForeground(true);
     }
 
     private final class LoadBrainThread extends Thread {
         @Override
         public void run() {
+            Log.d("BrainService","LoadBrainThread run()");
 
-            Alice.setup(BrainService.this);
-
-            Intent localIntent =
-                    new Intent(Constants.BROADCAST_ACTION_BRAIN_LOADING)
+            Intent loadingIntent =
+                    new Intent(Constants.BROADCAST_ACTION_BRAIN_STATUS)
                             // Puts the status into the Intent
-                            .putExtra(Constants.EXTENDED_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
+                            .putExtra(Constants.EXTRA_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADING);
             // Broadcasts the Intent to receivers in this app.
-            LocalBroadcastManager.getInstance(BrainService.this).sendBroadcast(localIntent);
+            LocalBroadcastManager.getInstance(BrainService.this).sendBroadcast(loadingIntent);
+            showLoadingNotification();
 
-            isBrainLoaded = true;
+            alice = Alice.setup(BrainService.this);
 
-            //Show notification
-            Intent openIntent = new Intent(BrainService.this, MainActivity.class);
-            openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent openPIntent = PendingIntent.getActivity(BrainService.this, 0, openIntent, 0);
+            Intent loadedIntent =
+                    new Intent(Constants.BROADCAST_ACTION_BRAIN_STATUS)
+                            // Puts the status into the Intent
+                            .putExtra(Constants.EXTRA_BRAIN_STATUS, Constants.STATUS_BRAIN_LOADED);
+            // Broadcasts the Intent to receivers in this app.
+            LocalBroadcastManager.getInstance(BrainService.this).sendBroadcast(loadedIntent);
 
-            Intent stopIntent = new Intent(BrainService.this, BrainService.class);
-            stopIntent.putExtra(COMMAND_ACTION, ACTION_STOP);
-            PendingIntent stopPIntent = PendingIntent.getService(BrainService.this, 0, stopIntent, 0);
+            showLoadedNotification();
 
-            Intent restartIntent = new Intent(BrainService.this, BrainService.class);
-            restartIntent.putExtra(COMMAND_ACTION, ACTION_START);
-            PendingIntent restartPIntent = PendingIntent.getService(BrainService.this, 0, restartIntent, 0);
-
-            Notification note =
-                    new NotificationCompat.Builder(BrainService.this)
-                            .setSmallIcon(R.drawable.ic_stat_notify_chat)
-                            .setTicker("Brain Loaded")
-                            .setContentTitle("Alice Brain")
-                            .setContentText("You can talk to me")
-                            .setAutoCancel(false)
-                            .setContentIntent(openPIntent)
-                            .setWhen(System.currentTimeMillis())
-                            .addAction(R.drawable.ic_stat_reload, "Restart", restartPIntent)
-                            .addAction(R.drawable.ic_stat_stop, "Stop", stopPIntent)
-                            .build();
-
-            startForeground(NOTIFICATION_ID, note);
         }
+    }
+
+    private void showLoadedNotification(){
+        Intent openIntent = new Intent(BrainService.this, MainActivity.class);
+        openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent openPIntent = PendingIntent.getActivity(BrainService.this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent stopIntent = new Intent(BrainService.this, BrainService.class);
+        stopIntent.setAction(ACTION_STOP);
+        PendingIntent stopPIntent = PendingIntent.getService(BrainService.this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent restartIntent = new Intent(BrainService.this, BrainService.class);
+        restartIntent.setAction(ACTION_START);
+        PendingIntent restartPIntent = PendingIntent.getService(BrainService.this, 0, restartIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification note =
+                new NotificationCompat.Builder(BrainService.this)
+                        .setSmallIcon(R.drawable.ic_stat_notify_chat)
+                        .setTicker("Brain Loaded")
+                        .setContentTitle("Alice Brain")
+                        .setContentText("You can talk to me")
+                        .setAutoCancel(false)
+                        .setContentIntent(openPIntent)
+                        .setWhen(System.currentTimeMillis())
+                        .addAction(R.drawable.ic_stat_reload, "Restart", restartPIntent)
+                        .addAction(R.drawable.ic_stat_stop, "Stop", stopPIntent)
+                        .build();
+
+        startForeground(NOTIFICATION_ID, note);
+    }
+
+    private void showLoadingNotification(){
+        Intent openIntent = new Intent(BrainService.this, MainActivity.class);
+        openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent openPIntent = PendingIntent.getActivity(BrainService.this, 0, openIntent, 0);
+
+        Intent stopIntent = new Intent(BrainService.this, BrainService.class);
+        stopIntent.setAction(ACTION_STOP);
+        PendingIntent stopPIntent = PendingIntent.getService(BrainService.this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification note =
+                new NotificationCompat.Builder(BrainService.this)
+                        .setSmallIcon(R.drawable.ic_stat_notify_chat)
+                        .setTicker("Loading Brain")
+                        .setContentTitle("Alice Brain")
+                        .setContentText("Loading...")
+                        .setAutoCancel(false)
+                        .setContentIntent(openPIntent)
+                        .setWhen(System.currentTimeMillis())
+                        .setProgress(0, 0, true)
+//                        .addAction(R.drawable.ic_stat_reload, "Restart", restartPIntent)
+                        .addAction(R.drawable.ic_stat_stop, "Stop", stopPIntent)
+                        .build();
+
+        startForeground(NOTIFICATION_ID, note);
     }
 }

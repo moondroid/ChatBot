@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
             dialog = new BrainLoggerDialog();
             if(!ChatBotApplication.isBrainLoaded()){
                 dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
+            }else {
+                dialog.setPositiveButtonEnabled(true);
             }
 
         } else {

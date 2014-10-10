@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:id="@+id/wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|right">
+
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/msg_out"
+            tools:text="Hello bubbles!"
+            android:textColor="@android:color/primary_text_light" />
+
+        <it.moondroid.chatbot.CircleImageView
+            android:id="@+id/image_view"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            app:border_width="2dp"
+            app:border_color="@android:color/white"
+            android:src="@drawable/user_placeholder"/>
+
+    </LinearLayout>
+
+</LinearLayout>

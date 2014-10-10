@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 
         if (savedInstanceState == null) {
             Log.d("MainActivity", "onCreate savedInstanceState null");
-            adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
+            adapter = new ChatArrayAdapter(getApplicationContext());
 
             dialog = new BrainLoggerDialog();
             if (!ChatBotApplication.isBrainLoaded()) {
@@ -171,6 +171,7 @@ public class MainActivity extends Activity {
             if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_ACTION_BRAIN_ANSWER)) {
                 String answer = intent.getStringExtra(Constants.EXTRA_BRAIN_ANSWER);
                 adapter.add(new ChatMessage(true, answer));
+                adapter.notifyDataSetChanged();
             }
 
             if (intent.getAction().equalsIgnoreCase(Constants.BROADCAST_ACTION_LOGGER)) {

@@ -3,6 +3,7 @@ package it.moondroid.chatbot;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,9 @@ import java.util.List;
  */
 public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
+    private static final int LEFT_MESSAGE = -1;
+    private static final int RIGHT_MESSAGE = 1;
+
     private TextView messageTextView;
     private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
     private LinearLayout wrapper;
@@ -29,8 +33,8 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         super.add(object);
     }
 
-    public ChatArrayAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
+    public ChatArrayAdapter(Context context) {
+        super(context, android.R.layout.simple_list_item_1);
     }
 
     public int getCount() {
@@ -41,23 +45,37 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         return this.chatMessages.get(index);
     }
 
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return (chatMessages.get(position).left ? LEFT_MESSAGE : RIGHT_MESSAGE);
+    }
+
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
+        ChatMessage comment = getItem(position);
+
+        int type = getItemViewType(position);
+
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.chat_listitem, parent, false);
+
+            if(type==LEFT_MESSAGE){
+                row = inflater.inflate(R.layout.chat_listitem_left, parent, false);
+            }
+            if(type==RIGHT_MESSAGE){
+                row = inflater.inflate(R.layout.chat_listitem_right, parent, false);
+            }
         }
 
         wrapper = (LinearLayout) row.findViewById(R.id.wrapper);
 
-        ChatMessage comment = getItem(position);
-
         messageTextView = (TextView) row.findViewById(R.id.text);
-
         messageTextView.setText(comment.text);
-
-        messageTextView.setBackgroundResource(comment.left ? R.drawable.msg_in : R.drawable.msg_out);
-        wrapper.setGravity(comment.left ? Gravity.LEFT : Gravity.RIGHT);
 
         return row;
     }

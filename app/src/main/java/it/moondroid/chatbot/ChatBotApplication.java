@@ -44,8 +44,6 @@ public class ChatBotApplication extends Application {
         startService(brainIntent);
 
         // Bind to LocalService
-//        Intent intent = new Intent(this, BrainService.class);
-//        intent.setAction(BrainService.ACTION_START);
         bindService(brainIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 

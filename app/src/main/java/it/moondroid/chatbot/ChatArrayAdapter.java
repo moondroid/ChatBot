@@ -56,7 +56,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
         messageTextView.setText(comment.text);
 
-        messageTextView.setBackgroundResource(comment.left ? R.drawable.bubble_yellow : R.drawable.bubble_green);
+        messageTextView.setBackgroundResource(comment.left ? R.drawable.msg_in : R.drawable.msg_out);
         wrapper.setGravity(comment.left ? Gravity.LEFT : Gravity.RIGHT);
 
         return row;

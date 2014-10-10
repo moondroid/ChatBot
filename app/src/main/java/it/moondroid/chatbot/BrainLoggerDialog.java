@@ -111,6 +111,13 @@ public class BrainLoggerDialog extends DialogFragment {
         super.onDismiss(dialog);
     }
 
+
+    public void clear(){
+        if (tv != null) {
+            tv.setText("");
+        }
+    }
+
     public void addLine(String text) {
         if (tv != null) {
             tv.append(text+"\n");
@@ -119,12 +126,16 @@ public class BrainLoggerDialog extends DialogFragment {
     }
 
     public void setPositiveButtonEnabled(boolean enabled){
-        Button buttonOk = ((AlertDialog)getDialog()).getButton(AlertDialog.BUTTON_POSITIVE);
-        buttonOk.setEnabled(enabled);
+        AlertDialog dialog = (AlertDialog)getDialog();
+        if(dialog!=null){
+            Button buttonOk = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            buttonOk.setEnabled(enabled);
+        }
+
     }
 
     public void loadLog(){
-        tv.setText("");
+        clear();
         ArrayList<String> logs = (ArrayList<String>) BrainLogger.getInstance().getLogs().clone();
         for(String log : logs){
             addLine(log);

@@ -42,9 +42,9 @@ public class MainActivity extends Activity {
             adapter = new ChatArrayAdapter(getApplicationContext(), R.layout.chat_listitem);
 
             dialog = new BrainLoggerDialog();
-            if(!ChatBotApplication.isBrainLoaded()){
+            if (!ChatBotApplication.isBrainLoaded()) {
                 dialog.show(fm, FRAGMENT_DIALOG_LOG_TAG);
-            }else {
+            } else {
                 dialog.setPositiveButtonEnabled(true);
             }
 
@@ -96,7 +96,8 @@ public class MainActivity extends Activity {
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 mMessageReceiver, intentFilter);
 
-        if(dialog!=null && ChatBotApplication.isBrainLoaded()){
+        if (dialog != null && ChatBotApplication.isBrainLoaded()) {
+
             dialog.loadLog();
             dialog.setPositiveButtonEnabled(true);
         }
@@ -152,14 +153,14 @@ public class MainActivity extends Activity {
 
                     case Constants.STATUS_BRAIN_LOADING:
                         Toast.makeText(MainActivity.this, "brain loading", Toast.LENGTH_SHORT).show();
-                        if(dialog!=null){
+                        if (dialog != null) {
                             dialog.show(getFragmentManager(), FRAGMENT_DIALOG_LOG_TAG);
                         }
                         break;
 
                     case Constants.STATUS_BRAIN_LOADED:
                         Toast.makeText(MainActivity.this, "brain loaded", Toast.LENGTH_SHORT).show();
-                        if(dialog!=null){
+                        if (dialog != null) {
                             dialog.setPositiveButtonEnabled(true);
                         }
                         break;
@@ -187,8 +188,6 @@ public class MainActivity extends Activity {
 
         }
     }
-
-
 
 
 }

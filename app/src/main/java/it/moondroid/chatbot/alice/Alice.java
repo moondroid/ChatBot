@@ -22,11 +22,14 @@ package it.moondroid.chatbot.alice;
 
 import android.content.Context;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import it.moondroid.chatbot.BrainLogger;
-import it.moondroid.chatbot.alice.utils.IOUtils;
 
 
 public class Alice {
@@ -60,7 +63,7 @@ public class Alice {
     }
 
     public static void mainFunction (String[] args) {
-        String botName = "alice";
+        String botName = "alice-it";
         MagicBooleans.jp_tokenize = false;
         MagicBooleans.trace_mode = true;
         String action="chat";
